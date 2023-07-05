@@ -1,3 +1,7 @@
+import sys
+import getpass
+
+
 colors = {
     "black": "\u001b[30m",
     "red": "\u001b[31m",
@@ -123,4 +127,9 @@ class PasswordStrengthChecker:
         print(form('━' * bar_frac, color) + form('━' * (44-bar_frac), 'gray'))
 
 
-PasswordStrengthChecker().check('EETRY123')
+if __name__ == "__main__":
+    checker = PasswordStrengthChecker()
+    password = getpass.getpass()
+    sys.stdout.write("\033[K")  # clear line 
+    sys.stdout.write("\033[F")  # back to previous line
+    checker.check(password)
