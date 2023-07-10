@@ -64,23 +64,24 @@ class PasswordStrengthChecker:
                 symbols += 1
         
         _length = len(password)
+        mark = ((14 if _length > 14 else _length) / 14) * 3, 3
         if _length >= 14:
-            lengthStat = Stat((3, 3), "Excellent", "Secure against brute force attacks", color="green")
+            lengthStat = Stat(mark, "Excellent", "Secure against brute force attacks", color="green")
         elif _length >= 11:
-            lengthStat = Stat((2, 3), "Good", "Secure against brute force attacks", color="green")
+            lengthStat = Stat(mark, "Good", "Secure against brute force attacks", color="green")
         elif _length >= 8:
-            lengthStat = Stat((1, 3), "Short", "May be insecure against brute force attacks", color="yellow")
+            lengthStat = Stat(mark, "Short", "Plassibly crackable brute force attacks", color="yellow")
         else:
-            lengthStat = Stat((0, 3), "Too short", "Crackable via brute force attacks", "A length of at least 8 is recommended", color="red")
+            lengthStat = Stat(mark, "Too short", "Crackable via brute force attacks", "A length of at least 8 is recommended", color="red")
 
         with open("10k-most-common.txt", 'r') as f:
             found = password + "\n" in f.readlines()
             res[f"{'A' if found else 'Not a'} common password"] = Stat(
                 (-5 if found else 0, 0),
                 "COMMON" if found else "Uncommon",
-                f"{'Found' if found else 'Not found'} in 10,000 most common passwords",
+                f"{'CRACKABLE. Found' if found else 'Not found'} in 10,000 most common passwords",
                 color="red" if found else "white",
-                symbol="✖" if found else " "
+                symbol="✖" if found else ">"
             )
         
         res[f"Length ({len(password)})"] = lengthStat
